@@ -6,10 +6,19 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '0.1.1',
+    date: '2026-03-29',
+    changes: [
+      'Move Updates to a modal in the header, accessible from anywhere in the app',
+    ],
+  },
+  {
     version: '0.1.0',
     date: '2026-03-29',
     changes: [
       'Add year filter dropdown for year-in-review stats',
+      'Add Updates section with app changelog',
+      'Re-importable CSV exports with original entry IDs preserved',
     ],
   },
   {
