@@ -42,6 +42,11 @@ export function useFileUpload(onParsed: (entries: import('../types').NormalizedE
         const result = await parseFile(file);
         const svc = result.service === 'unknown' ? 'unknown' : result.service;
 
+        // Reset the temporary 'unknown' spinner if the file resolved to a known service
+        if (svc !== 'unknown') {
+          setServiceState('unknown', { ...DEFAULT_STATE });
+        }
+
         setServiceState(svc, {
           status: result.entries.length > 0 ? 'done' : 'error',
           count: result.entries.length,
