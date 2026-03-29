@@ -36,7 +36,7 @@ function UploadPhase({
       <div className="text-center">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Upload your watch history</h2>
         <p className="mt-2 text-gray-500">
-          Export CSV files from Netflix, Prime Video, Hulu, and Plex, then drop them below.
+          Export CSV/PDF files from Netflix, Prime Video, Hulu, and Plex, then drop them below.
           Everything is processed locally — your data never leaves your device.
         </p>
       </div>
