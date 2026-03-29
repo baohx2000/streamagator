@@ -24,13 +24,11 @@ function UploadPhase({
   uploadStates,
   handleFiles,
   onViewHistory,
-  hasEntries,
   savedCount,
 }: {
   uploadStates: ReturnType<typeof useFileUpload>['uploadStates'];
   handleFiles: (files: FileList | File[]) => void;
   onViewHistory: () => void;
-  hasEntries: boolean;
   savedCount: number;
 }) {
   return (
@@ -44,10 +42,12 @@ function UploadPhase({
       </div>
 
       {savedCount > 0 && (
-        <p className="text-center text-sm text-indigo-500">
-          {savedCount.toLocaleString()} entries loaded from your last session.{' '}
-          <button className="underline" onClick={onViewHistory}>View history →</button>
-        </p>
+        <div className="flex flex-col items-center gap-2">
+          <Button onClick={onViewHistory} className="px-8">
+            View History ({savedCount.toLocaleString()} entries) →
+          </Button>
+          <p className="text-xs text-gray-400">or upload more files below</p>
+        </div>
       )}
 
       <UploadZone onFiles={handleFiles} />
@@ -61,15 +61,6 @@ function UploadPhase({
 
       {uploadStates.unknown.status !== 'idle' && (
         <ServiceCard service="unknown" state={uploadStates.unknown} />
-      )}
-
-
-{hasEntries && (
-        <div className="flex justify-center">
-          <Button onClick={onViewHistory} className="px-8">
-            View History →
-          </Button>
-        </div>
       )}
     </div>
   );
@@ -106,7 +97,6 @@ export default function App() {
             uploadStates={uploadStates}
             handleFiles={handleFiles}
             onViewHistory={() => setPhase('explore')}
-            hasEntries={entries.length > 0}
             savedCount={entries.length}
           />
         ) : (
