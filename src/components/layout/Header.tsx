@@ -31,7 +31,9 @@ export function Header({ entries, onReset, onClearAll }: HeaderProps) {
           Upload Files
         </Button>
         {entries.length > 0 && (
-          <Button variant="ghost" onClick={onClearAll}>
+          <Button variant="ghost" onClick={() => {
+            if (window.confirm('Clear all watch history? This cannot be undone.')) onClearAll();
+          }}>
             Clear Data
           </Button>
         )}
