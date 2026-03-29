@@ -18,6 +18,7 @@ export interface NormalizedEntry {
 export interface FilterState {
   services: StreamingService[];
   contentType: ContentType | 'all';
+  year: string;
   dateFrom: string;
   dateTo: string;
   search: string;

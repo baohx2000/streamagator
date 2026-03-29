@@ -8,13 +8,14 @@ interface FilterBarProps {
   setFilters: (f: Partial<FilterState>) => void;
   resetFilters: () => void;
   counts: Record<StreamingService, number>;
+  availableYears: number[];
   uniqueOnly: boolean;
   setUniqueOnly: (v: boolean) => void;
 }
 
 const ALL_SERVICES: StreamingService[] = ['netflix', 'amazon', 'hulu', 'plex'];
 
-export function FilterBar({ filters, setFilters, resetFilters, counts, uniqueOnly, setUniqueOnly }: FilterBarProps) {
+export function FilterBar({ filters, setFilters, resetFilters, counts, availableYears, uniqueOnly, setUniqueOnly }: FilterBarProps) {
   const [searchInput, setSearchInput] = useState(filters.search);
 
   useEffect(() => {
@@ -32,6 +33,7 @@ export function FilterBar({ filters, setFilters, resetFilters, counts, uniqueOnl
     filters.search ||
     filters.dateFrom ||
     filters.dateTo ||
+    filters.year ||
     filters.contentType !== 'all' ||
     filters.services.length !== ALL_SERVICES.length + 1; // +1 for 'unknown'
 
@@ -53,6 +55,20 @@ export function FilterBar({ filters, setFilters, resetFilters, counts, uniqueOnl
           </button>
         ))}
       </div>
+
+      {/* Year */}
+      {availableYears.length > 1 && (
+        <select
+          value={filters.year}
+          onChange={e => setFilters({ year: e.target.value })}
+          className="text-sm border border-gray-300 dark:border-gray-600 rounded-md px-2 py-1 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+        >
+          <option value="">All years</option>
+          {availableYears.map(y => (
+            <option key={y} value={String(y)}>{y}</option>
+          ))}
+        </select>
+      )}
 
       {/* Content type */}
       <select

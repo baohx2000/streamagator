@@ -6,6 +6,7 @@ import { saveEntries, loadEntries, clearEntries } from '../utils/storage';
 const DEFAULT_FILTERS: FilterState = {
   services: ['netflix', 'amazon', 'hulu', 'plex', 'unknown'],
   contentType: 'all',
+  year: '',
   dateFrom: '',
   dateTo: '',
   search: '',
@@ -46,10 +47,16 @@ export function useWatchHistory() {
     setFiltersState(DEFAULT_FILTERS);
   }
 
+  const availableYears = useMemo(() => {
+    const years = new Set(entries.map(e => e.watchedAt.getFullYear()));
+    return Array.from(years).sort((a, b) => b - a);
+  }, [entries]);
+
   const filteredEntries = useMemo(() => {
     return entries.filter(entry => {
       if (!filters.services.includes(entry.service)) return false;
       if (filters.contentType !== 'all' && entry.contentType !== filters.contentType) return false;
+      if (filters.year && entry.watchedAt.getFullYear() !== parseInt(filters.year, 10)) return false;
       if (filters.dateFrom) {
         const from = new Date(filters.dateFrom);
         if (entry.watchedAt < from) return false;
@@ -80,6 +87,7 @@ export function useWatchHistory() {
   return {
     entries,
     filteredEntries,
+    availableYears,
     filters,
     stats,
     serviceEntryCounts,

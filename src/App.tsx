@@ -73,7 +73,7 @@ export default function App() {
   const [tab, setTab] = useState<Tab>('stats');
   const [uniqueOnly, setUniqueOnly] = useState(false);
 
-  const { entries, filteredEntries, filters, stats, serviceEntryCounts, addEntries, clearAll, setFilters, resetFilters } =
+  const { entries, filteredEntries, availableYears, filters, stats, serviceEntryCounts, addEntries, clearAll, setFilters, resetFilters } =
     useWatchHistory();
 
   const { uploadStates, handleFiles } = useFileUpload(addEntries);
@@ -144,6 +144,7 @@ export default function App() {
               setFilters={setFilters}
               resetFilters={resetFilters}
               counts={serviceEntryCounts}
+              availableYears={availableYears}
               uniqueOnly={uniqueOnly}
               setUniqueOnly={setUniqueOnly}
             />
