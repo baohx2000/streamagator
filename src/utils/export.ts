@@ -3,13 +3,15 @@ import type { NormalizedEntry } from '../types';
 import { SERVICE_LABELS } from '../constants/services';
 
 export function exportToCSV(entries: NormalizedEntry[]): void {
-  const header = 'Service,Title,Episode,Season,Content Type,Watched At\n';
+  const header = 'id,Service,Title,EpisodeTitle,Season,Episode,ContentType,Date\n';
   const rows = entries.map(e => {
     const cells = [
+      e.id,
       SERVICE_LABELS[e.service],
       `"${e.title.replace(/"/g, '""')}"`,
       e.episodeTitle ? `"${e.episodeTitle.replace(/"/g, '""')}"` : '',
       e.season ?? '',
+      e.episode ?? '',
       e.contentType,
       format(e.watchedAt, 'yyyy-MM-dd'),
     ];

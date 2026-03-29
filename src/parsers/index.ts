@@ -5,6 +5,7 @@ import { parseAmazon } from './amazon';
 import { parseHulu } from './hulu';
 import { parseHuluPDF } from './hulu-pdf';
 import { parsePlex } from './plex';
+import { parseStreamagator } from './streamagator';
 import type { ParseResult, StreamingService } from '../types';
 
 export function detectService(fileName: string, headers: string[]): StreamingService {
@@ -15,6 +16,10 @@ export function detectService(fileName: string, headers: string[]): StreamingSer
   if (lower.includes('plex')) return 'plex';
 
   const normalizedHeaders = headers.map(h => h.toLowerCase().trim());
+  // Streamagator export: has 'id' and 'contentype' columns
+  if (normalizedHeaders.includes('id') && normalizedHeaders.includes('contenttype')) {
+    return 'streamagator' as StreamingService;
+  }
   // Plex: Date + Title + Type + Season + Episode + EpisodeTitle
   if (normalizedHeaders.includes('type') && normalizedHeaders.includes('episodetitle')) {
     return 'plex';
@@ -59,6 +64,8 @@ export async function parseFile(file: File): Promise<ParseResult> {
         result = parseHulu(content, file.name);
       } else if (service === 'plex') {
         result = parsePlex(content, file.name);
+      } else if (service === ('streamagator' as StreamingService)) {
+        result = parseStreamagator(content, file.name);
       } else {
         // Try netflix as fallback
         result = parseNetflix(content, file.name);
