@@ -13,13 +13,12 @@ import { FilterBar } from './components/history/FilterBar';
 import { HistoryTable } from './components/history/HistoryTable';
 import { StatsDashboard } from './components/stats/StatsDashboard';
 import { MostWatched } from './components/stats/MostWatched';
-import { Changelog } from './components/Changelog';
 import { Button } from './components/ui/Button';
 import { EmptyState } from './components/ui/EmptyState';
-import { BarChart2, List, TrendingUp, Clock } from 'lucide-react';
+import { BarChart2, List, TrendingUp } from 'lucide-react';
 
 type Phase = 'upload' | 'explore';
-type Tab = 'stats' | 'history' | 'mostwatched' | 'updates';
+type Tab = 'stats' | 'history' | 'mostwatched';
 
 function UploadPhase({
   uploadStates,
@@ -137,35 +136,19 @@ export default function App() {
                 <TrendingUp className="w-4 h-4" />
                 Most Watched
               </button>
-              <button
-                onClick={() => setTab('updates')}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  tab === 'updates'
-                    ? 'bg-indigo-600 text-white'
-                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
-                }`}
-              >
-                <Clock className="w-4 h-4" />
-                Updates
-              </button>
             </div>
 
-            {/* Filters hidden on Updates tab */}
-            {tab !== 'updates' && (
-              <FilterBar
-                filters={filters}
-                setFilters={setFilters}
-                resetFilters={resetFilters}
-                counts={serviceEntryCounts}
-                availableYears={availableYears}
-                uniqueOnly={uniqueOnly}
-                setUniqueOnly={setUniqueOnly}
-              />
-            )}
+            <FilterBar
+              filters={filters}
+              setFilters={setFilters}
+              resetFilters={resetFilters}
+              counts={serviceEntryCounts}
+              availableYears={availableYears}
+              uniqueOnly={uniqueOnly}
+              setUniqueOnly={setUniqueOnly}
+            />
 
-            {tab === 'updates' ? (
-              <Changelog />
-            ) : filteredEntries.length === 0 ? (
+            {filteredEntries.length === 0 ? (
               <EmptyState
                 title="No entries match your filters"
                 description="Try adjusting or resetting your filters."
