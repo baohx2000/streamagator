@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import type { NormalizedEntry, FilterState, AggregatedStats, StreamingService } from '../types';
 import { computeStats } from '../utils/stats';
+import { saveEntries, loadEntries, clearEntries } from '../utils/storage';
 
 const DEFAULT_FILTERS: FilterState = {
   services: ['netflix', 'amazon', 'hulu', 'plex', 'unknown'],
@@ -11,19 +12,30 @@ const DEFAULT_FILTERS: FilterState = {
 };
 
 export function useWatchHistory() {
-  const [entries, setEntries] = useState<NormalizedEntry[]>([]);
+  const [entries, setEntries] = useState<NormalizedEntry[]>(() => loadEntries());
   const [filters, setFiltersState] = useState<FilterState>(DEFAULT_FILTERS);
 
   function addEntries(newEntries: NormalizedEntry[]) {
     setEntries(prev => {
       const existingIds = new Set(prev.map(e => e.id));
       const deduped = newEntries.filter(e => !existingIds.has(e.id));
-      return [...prev, ...deduped].sort((a, b) => b.watchedAt.getTime() - a.watchedAt.getTime());
+      const next = [...prev, ...deduped].sort((a, b) => b.watchedAt.getTime() - a.watchedAt.getTime());
+      saveEntries(next);
+      return next;
     });
   }
 
   function removeService(service: StreamingService) {
-    setEntries(prev => prev.filter(e => e.service !== service));
+    setEntries(prev => {
+      const next = prev.filter(e => e.service !== service);
+      saveEntries(next);
+      return next;
+    });
+  }
+
+  function clearAll() {
+    clearEntries();
+    setEntries([]);
   }
 
   function setFilters(partial: Partial<FilterState>) {
@@ -73,6 +85,7 @@ export function useWatchHistory() {
     serviceEntryCounts,
     addEntries,
     removeService,
+    clearAll,
     setFilters,
     resetFilters,
   };

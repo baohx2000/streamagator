@@ -25,11 +25,13 @@ function UploadPhase({
   handleFiles,
   onViewHistory,
   hasEntries,
+  savedCount,
 }: {
   uploadStates: ReturnType<typeof useFileUpload>['uploadStates'];
   handleFiles: (files: FileList | File[]) => void;
   onViewHistory: () => void;
   hasEntries: boolean;
+  savedCount: number;
 }) {
   return (
     <div className="w-full px-6 py-10 space-y-6">
@@ -40,6 +42,13 @@ function UploadPhase({
           Everything is processed locally — your data never leaves your device.
         </p>
       </div>
+
+      {savedCount > 0 && (
+        <p className="text-center text-sm text-indigo-500">
+          {savedCount.toLocaleString()} entries loaded from your last session.{' '}
+          <button className="underline" onClick={onViewHistory}>View history →</button>
+        </p>
+      )}
 
       <UploadZone onFiles={handleFiles} />
 
@@ -67,11 +76,13 @@ function UploadPhase({
 }
 
 export default function App() {
-  const [phase, setPhase] = useState<Phase>('upload');
+  const [phase, setPhase] = useState<Phase>(() =>
+    typeof window !== 'undefined' && localStorage.getItem('streamagator_entries') ? 'explore' : 'upload'
+  );
   const [tab, setTab] = useState<Tab>('stats');
   const [uniqueOnly, setUniqueOnly] = useState(false);
 
-  const { entries, filteredEntries, filters, stats, serviceEntryCounts, addEntries, setFilters, resetFilters } =
+  const { entries, filteredEntries, filters, stats, serviceEntryCounts, addEntries, clearAll, setFilters, resetFilters } =
     useWatchHistory();
 
   const { uploadStates, handleFiles } = useFileUpload(addEntries);
@@ -80,9 +91,14 @@ export default function App() {
     setPhase('upload');
   }
 
+  function handleClearAll() {
+    clearAll();
+    setPhase('upload');
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col">
-      <Header entries={filteredEntries} onReset={handleReset} />
+      <Header entries={filteredEntries} onReset={handleReset} onClearAll={handleClearAll} />
 
       <main className="flex-1">
         {phase === 'upload' ? (
@@ -91,6 +107,7 @@ export default function App() {
             handleFiles={handleFiles}
             onViewHistory={() => setPhase('explore')}
             hasEntries={entries.length > 0}
+            savedCount={entries.length}
           />
         ) : (
           <div className="w-full px-6 py-6 space-y-4">

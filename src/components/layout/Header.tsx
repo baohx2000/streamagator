@@ -6,9 +6,10 @@ import type { NormalizedEntry } from '../../types';
 interface HeaderProps {
   entries: NormalizedEntry[];
   onReset: () => void;
+  onClearAll: () => void;
 }
 
-export function Header({ entries, onReset }: HeaderProps) {
+export function Header({ entries, onReset, onClearAll }: HeaderProps) {
   return (
     <header className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
       <div className="flex items-center gap-3">
@@ -29,6 +30,11 @@ export function Header({ entries, onReset }: HeaderProps) {
         <Button variant="ghost" onClick={onReset}>
           Upload Files
         </Button>
+        {entries.length > 0 && (
+          <Button variant="ghost" onClick={onClearAll}>
+            Clear Data
+          </Button>
+        )}
       </div>
     </header>
   );
