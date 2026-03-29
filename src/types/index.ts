@@ -1,4 +1,4 @@
-export type StreamingService = 'netflix' | 'amazon' | 'hulu' | 'unknown';
+export type StreamingService = 'netflix' | 'amazon' | 'hulu' | 'plex' | 'unknown';
 
 export type ContentType = 'movie' | 'episode' | 'unknown';
 
@@ -27,7 +27,7 @@ export interface AggregatedStats {
   total: number;
   uniqueTitles: number;
   byService: Record<StreamingService, number>;
-  byMonth: Array<{ month: string; netflix: number; amazon: number; hulu: number; unknown: number }>;
+  byMonth: Array<{ month: string; netflix: number; amazon: number; hulu: number; plex: number; unknown: number }>;
   byDayOfWeek: Array<{ day: string; count: number }>;
   topTitles: Array<{ title: string; count: number; service: StreamingService }>;
   longestStreak: number;

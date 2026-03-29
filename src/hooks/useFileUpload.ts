@@ -11,6 +11,7 @@ export function useFileUpload(onParsed: (entries: import('../types').NormalizedE
     netflix: { ...DEFAULT_STATE },
     amazon: { ...DEFAULT_STATE },
     hulu: { ...DEFAULT_STATE },
+    plex: { ...DEFAULT_STATE },
     unknown: { ...DEFAULT_STATE },
   });
 

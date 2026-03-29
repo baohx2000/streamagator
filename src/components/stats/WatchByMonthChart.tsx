@@ -2,13 +2,14 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 import { SERVICE_COLORS } from '../../constants/services';
 
 interface Props {
-  byMonth: Array<{ month: string; netflix: number; amazon: number; hulu: number; unknown: number }>;
+  byMonth: Array<{ month: string; netflix: number; amazon: number; hulu: number; plex: number; unknown: number }>;
   hasNetflix: boolean;
   hasAmazon: boolean;
   hasHulu: boolean;
+  hasPlex: boolean;
 }
 
-export function WatchByMonthChart({ byMonth, hasNetflix, hasAmazon, hasHulu }: Props) {
+export function WatchByMonthChart({ byMonth, hasNetflix, hasAmazon, hasHulu, hasPlex }: Props) {
   if (byMonth.length === 0) return null;
 
   // Show last 24 months max to keep chart readable
@@ -27,6 +28,7 @@ export function WatchByMonthChart({ byMonth, hasNetflix, hasAmazon, hasHulu }: P
           {hasNetflix && <Bar dataKey="netflix" stackId="a" fill={SERVICE_COLORS.netflix} name="Netflix" />}
           {hasAmazon && <Bar dataKey="amazon" stackId="a" fill={SERVICE_COLORS.amazon} name="Prime Video" />}
           {hasHulu && <Bar dataKey="hulu" stackId="a" fill={SERVICE_COLORS.hulu} name="Hulu" />}
+          {hasPlex && <Bar dataKey="plex" stackId="a" fill={SERVICE_COLORS.plex} name="Plex" />}
         </BarChart>
       </ResponsiveContainer>
     </div>

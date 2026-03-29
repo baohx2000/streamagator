@@ -14,6 +14,7 @@ export function StatsDashboard({ stats, entries }: Props) {
   const hasNetflix = stats.byService.netflix > 0;
   const hasAmazon = stats.byService.amazon > 0;
   const hasHulu = stats.byService.hulu > 0;
+  const hasPlex = stats.byService.plex > 0;
 
   return (
     <div className="space-y-6">
@@ -34,6 +35,7 @@ export function StatsDashboard({ stats, entries }: Props) {
           hasNetflix={hasNetflix}
           hasAmazon={hasAmazon}
           hasHulu={hasHulu}
+          hasPlex={hasPlex}
         />
         <TopTitlesChart topTitles={stats.topTitles} />
       </div>

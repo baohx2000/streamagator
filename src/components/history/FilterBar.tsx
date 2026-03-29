@@ -12,7 +12,7 @@ interface FilterBarProps {
   setUniqueOnly: (v: boolean) => void;
 }
 
-const ALL_SERVICES: StreamingService[] = ['netflix', 'amazon', 'hulu'];
+const ALL_SERVICES: StreamingService[] = ['netflix', 'amazon', 'hulu', 'plex'];
 
 export function FilterBar({ filters, setFilters, resetFilters, counts, uniqueOnly, setUniqueOnly }: FilterBarProps) {
   const [searchInput, setSearchInput] = useState(filters.search);
@@ -33,7 +33,7 @@ export function FilterBar({ filters, setFilters, resetFilters, counts, uniqueOnl
     filters.dateFrom ||
     filters.dateTo ||
     filters.contentType !== 'all' ||
-    filters.services.length !== 4;
+    filters.services.length !== ALL_SERVICES.length + 1; // +1 for 'unknown'
 
   return (
     <div className="flex flex-wrap gap-3 items-center p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">

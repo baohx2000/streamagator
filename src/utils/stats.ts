@@ -3,8 +3,8 @@ import type { NormalizedEntry, AggregatedStats, StreamingService } from '../type
 import { DAYS_OF_WEEK } from '../constants/services';
 
 export function computeStats(entries: NormalizedEntry[]): AggregatedStats {
-  const byService: Record<StreamingService, number> = { netflix: 0, amazon: 0, hulu: 0, unknown: 0 };
-  const monthMap = new Map<string, { netflix: number; amazon: number; hulu: number; unknown: number }>();
+  const byService: Record<StreamingService, number> = { netflix: 0, amazon: 0, hulu: 0, plex: 0, unknown: 0 };
+  const monthMap = new Map<string, { netflix: number; amazon: number; hulu: number; plex: number; unknown: number }>();
   const dayMap = new Map<string, number>();
   const titleMap = new Map<string, { count: number; service: StreamingService }>();
   const dateSet = new Set<string>();
@@ -17,7 +17,7 @@ export function computeStats(entries: NormalizedEntry[]): AggregatedStats {
 
     const month = format(entry.watchedAt, 'yyyy-MM');
     if (!monthMap.has(month)) {
-      monthMap.set(month, { netflix: 0, amazon: 0, hulu: 0, unknown: 0 });
+      monthMap.set(month, { netflix: 0, amazon: 0, hulu: 0, plex: 0, unknown: 0 });
     }
     monthMap.get(month)![entry.service]++;
 
@@ -46,7 +46,7 @@ export function computeStats(entries: NormalizedEntry[]): AggregatedStats {
   let mostActiveMonth = '';
   let maxMonthCount = 0;
   for (const [month, counts] of monthMap.entries()) {
-    const total = counts.netflix + counts.amazon + counts.hulu + counts.unknown;
+    const total = counts.netflix + counts.amazon + counts.hulu + counts.plex + counts.unknown;
     if (total > maxMonthCount) {
       maxMonthCount = total;
       mostActiveMonth = format(new Date(month + '-01'), 'MMM yyyy');

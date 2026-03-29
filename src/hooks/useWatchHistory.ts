@@ -3,7 +3,7 @@ import type { NormalizedEntry, FilterState, AggregatedStats, StreamingService } 
 import { computeStats } from '../utils/stats';
 
 const DEFAULT_FILTERS: FilterState = {
-  services: ['netflix', 'amazon', 'hulu', 'unknown'],
+  services: ['netflix', 'amazon', 'hulu', 'plex', 'unknown'],
   contentType: 'all',
   dateFrom: '',
   dateTo: '',
@@ -60,7 +60,7 @@ export function useWatchHistory() {
   const stats: AggregatedStats = useMemo(() => computeStats(filteredEntries), [filteredEntries]);
 
   const serviceEntryCounts = useMemo(() => {
-    const counts: Record<StreamingService, number> = { netflix: 0, amazon: 0, hulu: 0, unknown: 0 };
+    const counts: Record<StreamingService, number> = { netflix: 0, amazon: 0, hulu: 0, plex: 0, unknown: 0 };
     for (const e of entries) counts[e.service]++;
     return counts;
   }, [entries]);

@@ -8,6 +8,7 @@ import { ServiceCard } from './components/upload/ServiceCard';
 import { NetflixInstructions } from './components/upload/NetflixInstructions';
 import { AmazonInstructions } from './components/upload/AmazonInstructions';
 import { HuluInstructions } from './components/upload/HuluInstructions';
+import { PlexInstructions } from './components/upload/PlexInstructions';
 import { FilterBar } from './components/history/FilterBar';
 import { HistoryTable } from './components/history/HistoryTable';
 import { StatsDashboard } from './components/stats/StatsDashboard';
@@ -35,17 +36,18 @@ function UploadPhase({
       <div className="text-center">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Upload your watch history</h2>
         <p className="mt-2 text-gray-500">
-          Export CSV files from Netflix, Prime Video, and Hulu, then drop them below.
+          Export CSV files from Netflix, Prime Video, Hulu, and Plex, then drop them below.
           Everything is processed locally — your data never leaves your device.
         </p>
       </div>
 
       <UploadZone onFiles={handleFiles} />
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         <ServiceCard service="netflix" state={uploadStates.netflix} instructions={<NetflixInstructions />} />
         <ServiceCard service="amazon" state={uploadStates.amazon} instructions={<AmazonInstructions />} />
         <ServiceCard service="hulu" state={uploadStates.hulu} instructions={<HuluInstructions />} />
+        <ServiceCard service="plex" state={uploadStates.plex} instructions={<PlexInstructions />} />
       </div>
 
       {uploadStates.unknown.status !== 'idle' && (
