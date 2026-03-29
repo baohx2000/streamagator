@@ -1,73 +1,50 @@
-# React + TypeScript + Vite
+# Streamagator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aggregate and explore your streaming watch history from Netflix, Amazon Prime Video, and Hulu — all in the browser. No account required, no data ever leaves your device.
 
-Currently, two official plugins are available:
+![Streamagator screenshot](screenshot.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- **Multi-service support** — import from Netflix (CSV), Prime Video (CSV), and Hulu (CSV or PDF data export)
+- **Statistics dashboard** — total watches, unique titles, longest streak, most active month, activity by month, top titles, and recent watches
+- **Most Watched tab** — series with 8+ unique episodes, with rewatch counts and season breakdown
+- **History tab** — full paginated watch history with filtering and a "unique titles" toggle
+- **Filters** — by service, content type (movie/episode), date range, and text search
+- **Export** — download your merged, normalized history as a single CSV
+- **Privacy first** — everything runs locally; no server, no tracking
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Getting started
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Open [http://localhost:5173](http://localhost:5173).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## How to export your data
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+**Netflix**
+1. Go to [netflix.com/viewingactivity](https://www.netflix.com/viewingactivity)
+2. Scroll to the bottom and click **Download all**
+3. Upload `NetflixViewingHistory.csv`
+
+**Amazon Prime Video**
+1. Go to [amazon.com/hz/privacy-central/data-requests/preview.html](https://www.amazon.com/hz/privacy-central/data-requests/preview.html)
+2. Click **Request My Data** and select **Prime Video Watch History**
+3. Download the ZIP when ready and upload the Prime Video CSV
+
+**Hulu**
+1. Go to [hulu.com/account/privacy](https://www.hulu.com/account/privacy)
+2. Click **Download My Information** and select **Watch History**
+3. Upload either the PDF or CSV from the download
+
+## Tech stack
+
+- [React 19](https://react.dev) + [Vite](https://vite.dev) + TypeScript
+- [Tailwind CSS v4](https://tailwindcss.com)
+- [Recharts](https://recharts.org) for charts
+- [PapaParse](https://www.papaparse.com) for CSV parsing
+- [pdfjs-dist](https://github.com/mozilla/pdf.js) for Hulu PDF parsing
+- [date-fns](https://date-fns.org) for date handling
