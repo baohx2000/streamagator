@@ -6,6 +6,13 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '0.1.2',
+    date: '2026-03-29',
+    changes: [
+      'Fix Amazon Prime Video importer for the detailed CSV export format',
+    ],
+  },
+  {
     version: '0.1.1',
     date: '2026-03-29',
     changes: [

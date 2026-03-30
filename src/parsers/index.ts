@@ -28,7 +28,7 @@ export function detectService(fileName: string, headers: string[]): StreamingSer
   if (normalizedHeaders.includes('title') && normalizedHeaders.includes('date') && headers.length === 2) {
     return 'netflix';
   }
-  if (normalizedHeaders.some(h => h.includes('watchdate') || h.includes('playback date') || h.includes('asin'))) {
+  if (normalizedHeaders.some(h => h.includes('watchdate') || h.includes('playback date') || h.includes('playback start datetime') || h.includes('asin'))) {
     return 'amazon';
   }
   if (normalizedHeaders.some(h => h.includes('profile') || h.includes('hulu'))) {

@@ -3,8 +3,16 @@ import { cleanBOM, parseFlexibleDate, generateId } from '../utils/normalize';
 import type { NormalizedEntry, ParseResult } from '../types';
 
 const TITLE_KEYS = ['Title', 'title', 'Content Title', 'content_title', 'ContentTitle'];
-const DATE_KEYS = ['WatchDate', 'Playback Date', 'playback_date', 'ViewDate', 'Date Watched', 'date'];
+const DATE_KEYS = ['WatchDate', 'Playback Date', 'playback_date', 'ViewDate', 'Date Watched', 'date', 'Playback Start Datetime (UTC)'];
 const TYPE_KEYS = ['ContentType', 'Content Type', 'content_type', 'Type'];
+
+// Amazon's detailed CSV wraps string values in extra quotes: """value""" → "value"
+function stripQuotes(s: string): string {
+  if (s.length >= 2 && s.startsWith('"') && s.endsWith('"')) {
+    return s.slice(1, -1);
+  }
+  return s;
+}
 
 function findKey(obj: Record<string, string>, candidates: string[]): string | undefined {
   for (const c of candidates) {
@@ -44,9 +52,14 @@ export function parseAmazon(content: string, fileName: string): ParseResult {
   }
 
   for (const row of rows) {
-    const rawTitle = (row[titleKey] || '').trim();
-    const rawDate = (row[dateKey] || '').trim();
+    const rawTitle = stripQuotes((row[titleKey] || '').trim());
+    const rawDate = stripQuotes((row[dateKey] || '').trim());
     if (!rawTitle || !rawDate) continue;
+
+    // Skip promo clips and autoplay previews
+    const materialType = stripQuotes((row['Material Type Description'] || '').trim());
+    const isAutoplay = stripQuotes((row['Is Autoplay'] || '').trim());
+    if (materialType === 'Promo' || isAutoplay === 'Yes') continue;
 
     const watchedAt = parseFlexibleDate(rawDate);
     if (!watchedAt) {
@@ -54,16 +67,18 @@ export function parseAmazon(content: string, fileName: string): ParseResult {
       continue;
     }
 
-    const rawType = typeKey ? (row[typeKey] || '').toUpperCase() : '';
+    const rawType = typeKey ? stripQuotes((row[typeKey] || '').toUpperCase()) : '';
     const contentType = rawType.includes('MOVIE') ? 'movie' : rawType.includes('EPISODE') ? 'episode' : 'unknown';
 
-    // Attempt episode title parsing for Amazon (format varies)
-    let title = rawTitle;
+    // Amazon title format: "EpisodeTitle-ShowTitle" (plain hyphen, no spaces)
+    let title: string;
     let episodeTitle: string | undefined;
-    const colonIdx = rawTitle.indexOf(' - ');
-    if (colonIdx !== -1 && contentType !== 'movie') {
-      title = rawTitle.substring(0, colonIdx).trim();
-      episodeTitle = rawTitle.substring(colonIdx + 3).trim();
+    const dashIdx = contentType !== 'movie' ? rawTitle.indexOf('-') : -1;
+    if (dashIdx !== -1) {
+      episodeTitle = rawTitle.substring(0, dashIdx).trim();
+      title = rawTitle.substring(dashIdx + 1).trim();
+    } else {
+      title = rawTitle;
     }
 
     entries.push({
