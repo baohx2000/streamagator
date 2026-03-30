@@ -54,7 +54,7 @@ export function parseAmazon(content: string, fileName: string): ParseResult {
   for (const row of rows) {
     const rawTitle = stripQuotes((row[titleKey] || '').trim());
     const rawDate = stripQuotes((row[dateKey] || '').trim());
-    if (!rawTitle || !rawDate) continue;
+    if (!rawTitle || !rawDate || rawTitle === 'Not available') continue;
 
     // Skip promo clips and autoplay previews
     const materialType = stripQuotes((row['Material Type Description'] || '').trim());
@@ -68,18 +68,22 @@ export function parseAmazon(content: string, fileName: string): ParseResult {
     }
 
     const rawType = typeKey ? stripQuotes((row[typeKey] || '').toUpperCase()) : '';
-    const contentType = rawType.includes('MOVIE') ? 'movie' : rawType.includes('EPISODE') ? 'episode' : 'unknown';
+    let contentType: NormalizedEntry['contentType'] = rawType.includes('MOVIE') ? 'movie' : rawType.includes('EPISODE') ? 'episode' : 'unknown';
 
-    // Amazon title format: "EpisodeTitle-ShowTitle" (plain hyphen, no spaces)
+    // Amazon title format: "EpisodeTitle-ShowTitle - Season N" (plain hyphen, no spaces before dash)
     let title: string;
     let episodeTitle: string | undefined;
     const dashIdx = contentType !== 'movie' ? rawTitle.indexOf('-') : -1;
     if (dashIdx !== -1) {
       episodeTitle = rawTitle.substring(0, dashIdx).trim();
       title = rawTitle.substring(dashIdx + 1).trim();
+      // If content type is still unknown but we split on a dash, it's an episode
+      if (contentType === 'unknown') contentType = 'episode';
     } else {
       title = rawTitle;
     }
+    // Strip trailing " - Season N" from series title
+    title = title.replace(/ - Season \d+$/i, '');
 
     entries.push({
       id: generateId('amazon', rawTitle, rawDate),

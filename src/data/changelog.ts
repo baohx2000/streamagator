@@ -6,6 +6,15 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '0.1.3',
+    date: '2026-03-30',
+    changes: [
+      'Fix Amazon Prime CSV: filter out "Not available" title entries',
+      'Fix Amazon Prime CSV: strip season suffix from series titles (e.g. "Show - Season 2" → "Show")',
+      'Fix Amazon Prime CSV: correctly classify episodes in Most Watched screen',
+    ],
+  },
+  {
     version: '0.1.2',
     date: '2026-03-29',
     changes: [
