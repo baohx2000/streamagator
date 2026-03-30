@@ -48,12 +48,13 @@ export function parseNetflix(content: string, fileName: string): ParseResult {
     }
 
     const parsed = parseNetflixTitle(rawTitle);
+    const seriesTitle = parsed.seriesTitle || rawTitle;
     const id = generateId('netflix', rawTitle, rawDate);
 
     entries.push({
       id,
       service: 'netflix',
-      title: parsed.seriesTitle,
+      title: seriesTitle,
       rawTitle,
       episodeTitle: parsed.episodeTitle,
       season: parsed.season,

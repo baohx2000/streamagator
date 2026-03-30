@@ -6,6 +6,13 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '0.1.4',
+    date: '2026-03-30',
+    changes: [
+      'Fix Netflix CSV: entries with missing series name (": Episode X") no longer appear as a blank top title',
+    ],
+  },
+  {
     version: '0.1.3',
     date: '2026-03-30',
     changes: [
